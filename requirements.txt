@@ -7,3 +7,4 @@ python-magic
 streamlink
 youtube-dl
 git+https://github.com/yt-dlp/yt-dlp
+transfer.sh
