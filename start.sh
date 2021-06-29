@@ -1,8 +1,7 @@
-if [[ -n $RCLONE_CONFIG_BASE64 ]]; then
+if [[ -n $RCLONE_CONFIG_GIST ]]; then
 	echo "Rclone config detected"
     mkdir -p /usr/src/app/.config/rclone
-	echo "$(echo $RCLONE_CONFIG_BASE64|base64 -d)" >> /usr/src/app/.config/rclone/rclone.conf
-fi
+    curl $RCLONE_CONFIG_GIST -o /usr/src/app/.config/rclone/rclone.conf
 
 if [[ -n $BOT_TOKEN && -n $OWNER_ID ]]; then
 	echo "Bot token and owner ID detected"
