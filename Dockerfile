@@ -15,6 +15,9 @@ RUN sh -c 'echo "deb https://mkvtoolnix.download/debian/ buster main" >> /etc/ap
 # install system benchmark testing tool
 RUN curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | bash
 
+# install Speedtest CLI
+RUN curl -s https://install.speedtest.net/app/cli/install.deb.sh | bash
+
 # install required packages
 RUN apt-get update && apt-get install -y software-properties-common && \
     rm -rf /var/lib/apt/lists/* && \
@@ -26,8 +29,8 @@ RUN apt-get update && apt-get install -y software-properties-common && \
     coreutils aria2 jq pv gcc g++ \
     # install encoding tools
     mediainfo \
-    # benchmark tool
-    sysbench \
+    # benchmark & speedtest tool
+    sysbench speedtest \
     # miscellaneous
     neofetch python3-dev git bash build-essential nodejs npm ruby \
     python-minimal locales python-lxml qbittorrent-nox nginx gettext-base xz-utils \
