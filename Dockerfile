@@ -4,7 +4,10 @@ FROM python:3-slim-buster
 WORKDIR /usr/src/app
 RUN chmod 777 /usr/src/app
 RUN apt-get -qq update
-RUN apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq
+RUN apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq sudo
+
+RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+USER docker
 
 # add mkvtoolnix
 RUN wget -q -O - https://mkvtoolnix.download/gpg-pub-moritzbunkus.txt | apt-key add - && \
