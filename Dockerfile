@@ -7,7 +7,6 @@ RUN apt-get -qq update
 RUN apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq sudo
 
 RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
-USER docker
 
 # add mkvtoolnix
 RUN wget -q -O - https://mkvtoolnix.download/gpg-pub-moritzbunkus.txt | apt-key add - && \
@@ -75,6 +74,8 @@ RUN gem install rmega
 
 # Copies config(if it exists)
 COPY . .
+
+USER docker
 
 # Install requirements and start the bot
 RUN npm install
