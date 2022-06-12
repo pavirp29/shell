@@ -12,7 +12,7 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER admin
 
-RUN apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq
+RUN sudo apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq
 
 # add mkvtoolnix
 RUN wget -q -O - https://mkvtoolnix.download/gpg-pub-moritzbunkus.txt | apt-key add - && \
