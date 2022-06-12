@@ -6,6 +6,12 @@ RUN chmod 777 /usr/src/app
 RUN apt-get -qq update
 
 RUN apt-get -qq install -y sudo
+RUN adduser --disabled-password --gecos '' admin
+RUN adduser admin sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER admin
+
 RUN apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq
 
 # add mkvtoolnix
