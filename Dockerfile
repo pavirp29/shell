@@ -9,27 +9,27 @@ RUN apt-get -qq install -y sudo
 RUN adduser --disabled-password --gecos '' admin
 RUN adduser admin sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-USER admin
 
-RUN sudo apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq
+
+RUN apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq
 
 # add mkvtoolnix
-RUN wget -q -O - https://mkvtoolnix.download/gpg-pub-moritzbunkus.txt | sudo apt-key add - && \
-    wget -qO - https://ftp-master.debian.org/keys/archive-key-10.asc | sudo apt-key add -
+RUN wget -q -O - https://mkvtoolnix.download/gpg-pub-moritzbunkus.txt | apt-key add - && \
+    wget -qO - https://ftp-master.debian.org/keys/archive-key-10.asc | apt-key add -
 RUN sudo sh -c 'echo "deb https://mkvtoolnix.download/debian/ buster main" >> /etc/apt/sources.list.d/bunkus.org.list' && \
-    sudo sh -c 'echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list' && sudo apt update && apt install -y mkvtoolnix
+    sudo sh -c 'echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list' && apt update && apt install -y mkvtoolnix
 
 # install system benchmark testing tool
-RUN sudo curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | bash
+RUN curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | bash
 
 # install Speedtest CLI
-RUN sudo curl -s https://install.speedtest.net/app/cli/install.deb.sh | bash
+RUN curl -s https://install.speedtest.net/app/cli/install.deb.sh | bash
 
 # install required packages
-RUN sudo apt-get update && apt-get install -y software-properties-common && \
-    sudo rm -rf /var/lib/apt/lists/* && \
-    sudo apt-add-repository non-free && \
-    sudo apt-get -qq update && apt-get -qq install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y software-properties-common && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-add-repository non-free && \
+    apt-get -qq update && apt-get -qq install -y --no-install-recommends \
     # this package is required to fetch "contents" via "TLS"
     apt-transport-https \
     # install coreutils
@@ -91,5 +91,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN dpkg --add-architecture i386 && apt-get update && apt-get -y dist-upgrade
+
+USER admin
 
 CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon on;' &&  qbittorrent-nox -d --webui-port=8080 && cd /usr/src/app && mkdir Downloads && bash start.sh
