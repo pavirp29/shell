@@ -9,6 +9,9 @@ RUN apt-get -qq install -y sudo
 RUN adduser --disabled-password --gecos '' admin
 RUN adduser admin sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER admin
+
+RUN sudo su
 
 RUN apt-get -qq install -y --no-install-recommends curl git gnupg2 unzip wget pv jq
 
